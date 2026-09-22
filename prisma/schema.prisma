@@ -5,9 +5,8 @@ generator client {
 // Para PostgreSQL: troque provider por "postgresql" e use uma URL postgres:// em DATABASE_URL.
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
-
 // Configurações da equipe (registro único, id = "team")
 model Team {
   id           String  @id @default("team")
