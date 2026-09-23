@@ -16,7 +16,7 @@ import { EmptyState } from './page-header';
 import { EntityFormDialog, type Field, type Values } from './entity-form-dialog';
 import { UserAvatar, UserChip } from './user-avatar';
 
-export type Row = Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
+export type Row = { id: string } & Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
 export type Column = {
   key: string;
   label: string;
@@ -73,14 +73,14 @@ export function EntityManager({
 
   async function submit(v: Values) {
     const r = await saveEntity(model, current?.id ?? null, v);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success(`${entityLabel} salvo(a)`);
     setEditing(null);
   }
   async function remove() {
     if (!current) return;
     const r = await deleteEntity(model, current.id);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success(`${entityLabel} excluído(a)`);
     setEditing(null);
   }

@@ -52,7 +52,7 @@ export function TaskProvider({ children, members, competitions, canEdit, default
     removeTask: async (id) => {
       if (!confirm('Excluir esta tarefa? Esta ação não pode ser desfeita.')) return;
       const r = await deleteTask(id);
-      if (!r.ok) return toast.error(r.error);
+      if (!r.ok) { toast.error(r.error); return; }
       toast.success('Tarefa excluída');
       setSheetId(null);
     },
@@ -60,7 +60,7 @@ export function TaskProvider({ children, members, competitions, canEdit, default
 
   async function submit(v: Values) {
     const r = await saveTask(form.id, v);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success(form.id ? 'Tarefa atualizada' : 'Tarefa criada');
     setForm((f) => ({ ...f, open: false }));
     setRev((n) => n + 1);
@@ -125,7 +125,7 @@ function TaskSheet({ id, rev, onClose }: { id: string | null; rev: number; onClo
                 ))}
               </ul>
               {canEdit && (
-                <form className="mt-3 flex gap-2" onSubmit={async (e) => { e.preventDefault(); const r = await addComment(task.id, comment); if (!r.ok) return toast.error(r.error); setComment(''); load(); }}>
+                <form className="mt-3 flex gap-2" onSubmit={async (e) => { e.preventDefault(); const r = await addComment(task.id, comment); if (!r.ok) { toast.error(r.error); return; } setComment(''); load(); }}>
                   <Input value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Escreva um comentário" aria-label="Comentário" />
                   <Button type="submit" size="sm" className="h-9">Enviar</Button>
                 </form>

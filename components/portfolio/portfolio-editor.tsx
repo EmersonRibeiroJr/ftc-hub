@@ -64,7 +64,7 @@ export function PortfolioEditor({ chapters, canEdit, autoCreate }: { chapters: C
 
   async function addChapter() {
     const r = await createPortfolioChapter('Novo documento');
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success('Documento criado');
     if (r.id) setTimeout(() => setActiveId(r.id!), 400);
   }

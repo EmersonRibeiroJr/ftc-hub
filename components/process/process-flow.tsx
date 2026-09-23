@@ -81,7 +81,7 @@ function StepSheet({ id, canEdit, onClose }: { id: string | null; canEdit: boole
             <section>
               <h4 className="mb-2 font-display text-sm font-semibold">Observações</h4>
               <Textarea key={step.id} defaultValue={step.notes} readOnly={!canEdit} rows={5} placeholder="Registre o que a equipe decidiu e por quê"
-                onBlur={async (e) => { if (e.target.value !== step.notes) { const r = await saveStep(step.id, { notes: e.target.value }); r.ok ? toast.success('Observação salva') : toast.error(r.error); } }} />
+                onBlur={async (e) => {  if (e.target.value !== step.notes) {const r = await saveStep(step.id, { notes: e.target.value }); if (r.ok) { toast.success('Observação salva'); } else { toast.error(r.error); } } }} />
             </section>
           </div>
         )}

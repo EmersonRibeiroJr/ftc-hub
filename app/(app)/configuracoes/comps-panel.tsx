@@ -15,7 +15,7 @@ export function CompsPanel({ comps, canEdit }: { comps: Comp[]; canEdit: boolean
   const current = editing && editing !== 'new' ? editing : null;
   async function submit(v: Values) {
     const r = await saveEntity('competition', current?.id ?? null, v);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success('Competição salva');
     setEditing(null);
   }
@@ -38,7 +38,10 @@ export function CompsPanel({ comps, canEdit }: { comps: Comp[]; canEdit: boolean
       {editing && (
         <EntityFormDialog key={current?.id ?? 'new'} open onOpenChange={(o) => !o && setEditing(null)} title={current ? 'Editar competição' : 'Nova competição'} fields={FIELDS}
           values={current ?? { date: toKey(new Date()) }} onSubmit={submit}
-          onDelete={current ? async () => { const r = await deleteEntity('competition', current.id); r.ok ? (toast.success('Excluída'), setEditing(null)) : toast.error(r.error); } : undefined} />
+          onDelete={current ? async () => {
+  const r = await deleteEntity('competition', current.id);
+  if (r.ok) { toast.success('Excluída'); setEditing(null); } else { toast.error(r.error); }
+} : undefined} />
       )}
     </div>
   );

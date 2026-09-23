@@ -26,7 +26,7 @@ export async function readSession(token?: string): Promise<Session | null> {
 
 export async function createSession(s: Session) {
   const token = await new SignJWT({ ...s }).setProtectedHeader({ alg: 'HS256' }).setIssuedAt().setExpirationTime(`${MAX_AGE}s`).sign(secret());
-  cookies().set(COOKIE, token, { httpOnly: true, sameSite: 'lax', secure: process.env.NODE_ENV === 'production', path: '/', maxAge: MAX_AGE });
+  cookies().set(COOKIE, token, { httpOnly: true, sameSite: 'lax', secure: process.env.COOKIE_SECURE === 'true', path: '/', maxAge: MAX_AGE });
 }
 
 export const destroySession = () => cookies().delete(COOKIE);

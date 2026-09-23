@@ -37,7 +37,7 @@ export function SystemCards({ rows, kind, members, canEdit, autoOpen }: { rows: 
 
   async function submit(v: Values) {
     const r = await saveEntity('robotSystem', current?.id ?? null, { ...v, kind });
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success(`${noun[0].toUpperCase() + noun.slice(1)} salvo`);
     setEditing(null);
   }
@@ -78,7 +78,7 @@ export function SystemCards({ rows, kind, members, canEdit, autoOpen }: { rows: 
       {editing && (
         <EntityFormDialog key={current?.id ?? 'new'} open onOpenChange={(o) => !o && setEditing(null)} title={current ? `Editar ${noun}` : `Novo ${noun}`} fields={fields}
           values={current ?? { status: 'PLANNED', version: 'v0.1', progress: 0 }} onSubmit={submit}
-          onDelete={current ? async () => { const r = await deleteEntity('robotSystem', current.id); r.ok ? (toast.success('Excluído'), setEditing(null)) : toast.error(r.error); } : undefined} />
+          onDelete={current ? async () => {  const r = await deleteEntity('robotSystem', current.id);  if (r.ok) { toast.success('Excluído'); setEditing(null); } else { toast.error(r.error); }} : undefined} />
       )}
     </>
   );

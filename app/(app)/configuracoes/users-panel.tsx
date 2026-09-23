@@ -22,7 +22,8 @@ export function UsersPanel({ members, isAdmin }: { members: Member[]; isAdmin: b
                 <td className="px-3 py-2.5">{m.title || '—'}</td>
                 <td className="px-3 py-2.5">
                   <Select className="w-32" defaultValue={m.role} disabled={!isAdmin} aria-label={`Permissão de ${m.name}`}
-                    onChange={async (e) => { const r = await updateRole(m.id, e.target.value); r.ok ? toast.success('Permissão atualizada') : (toast.error(r.error), (e.target.value = m.role)); }}>
+                    onChange={async (e) => {const r = await updateRole(m.id, e.target.value);
+  if (r.ok) { toast.success('Permissão atualizada'); } else { toast.error(r.error); e.target.value = m.role; } }}>
                     {ROLE.map((r) => <option key={r.value} value={r.value}>{r.label}</option>)}
                   </Select>
                 </td>

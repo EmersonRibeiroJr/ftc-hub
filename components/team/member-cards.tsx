@@ -32,7 +32,7 @@ export function MemberCards({ members, canEdit, isAdmin, autoOpen }: { members: 
 
   async function submit(v: Values) {
     const r = await saveMember(current?.id ?? null, v);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success('Membro salvo');
     setEditing(null);
   }
@@ -67,7 +67,7 @@ export function MemberCards({ members, canEdit, isAdmin, autoOpen }: { members: 
       {editing && (
         <EntityFormDialog key={current?.id ?? 'new'} open onOpenChange={(o) => !o && setEditing(null)} title={current ? 'Editar membro' : 'Novo membro'} fields={FIELDS}
           values={current ?? { level: 'BEGINNER', trainingHours: 0 }} onSubmit={submit}
-          onDelete={current && isAdmin ? async () => { const r = await deleteMember(current.id); r.ok ? (toast.success('Membro removido'), setEditing(null)) : toast.error(r.error); } : undefined} />
+          onDelete={current && isAdmin ? async () => {  const r = await deleteMember(current.id);  if (r.ok) { toast.success('Membro removido'); setEditing(null); } else { toast.error(r.error); }} : undefined} />
       )}
     </>
   );

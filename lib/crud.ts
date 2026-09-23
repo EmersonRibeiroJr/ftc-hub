@@ -7,6 +7,7 @@ import { fromKey } from './dates';
 import type { Result } from './utils';
 
 const refresh = () => revalidatePath('/', 'layout');
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const delegateOf = (name: string) => (prisma as unknown as Record<string, any>)[name];
 
 export async function saveEntity(model: ModelKey, id: string | null, values: Record<string, unknown>): Promise<Result> {

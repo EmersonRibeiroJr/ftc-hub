@@ -26,7 +26,7 @@ export function EventsCalendar({ events, canEdit, autoOpen }: { events: EventRow
 
   async function submit(v: Values) {
     const r = await saveEntity('calendarEvent', current?.id ?? null, v);
-    if (!r.ok) return toast.error(r.error);
+    if (!r.ok) { toast.error(r.error); return; }
     toast.success('Evento salvo');
     setEditing(null);
   }
@@ -43,7 +43,7 @@ export function EventsCalendar({ events, canEdit, autoOpen }: { events: EventRow
           <CalendarView
             items={events.map((e) => ({ id: e.id, title: e.title, date: e.date, time: e.time, color: color(EVENT_TYPE, e.type) }))}
             onItemClick={(id) => canEdit ? setEditing(events.find((e) => e.id === id) ?? null) : undefined}
-            onMove={canEdit ? async (id, date) => { const r = await moveEvent(id, date); r.ok ? toast.success('Evento reagendado') : toast.error(r.error); } : undefined}
+            onMove={canEdit ? async (id, date) => {  const r = await moveEvent(id, date);  if (r.ok) { toast.success('Evento reagendado'); } else { toast.error(r.error); }} : undefined}
           />
         </CardContent>
       </Card>
@@ -52,7 +52,7 @@ export function EventsCalendar({ events, canEdit, autoOpen }: { events: EventRow
           key={current?.id ?? 'new'} open onOpenChange={(o) => !o && setEditing(null)}
           title={current ? 'Editar evento' : 'Novo evento'} fields={FIELDS}
           values={current ?? { type: 'TRAINING', date: todayKey() }} onSubmit={submit}
-          onDelete={current ? async () => { const r = await deleteEntity('calendarEvent', current.id); r.ok ? (toast.success('Evento excluído'), setEditing(null)) : toast.error(r.error); } : undefined}
+          onDelete={current ? async () => {  const r = await deleteEntity('calendarEvent', current.id);  if (r.ok) { toast.success('Evento excluído'); setEditing(null); } else { toast.error(r.error); }} : undefined}
         />
       )}
     </>

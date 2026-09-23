@@ -72,7 +72,7 @@ export function AttachmentPanel({ items, owner, canEdit, onChange, grouped }: { 
         <form className="flex flex-wrap gap-2" onSubmit={async (e) => {
           e.preventDefault();
           const r = await addLinkAttachment(owner, link.name, link.url, grouped ? kind : 'FILE');
-          if (!r.ok) return toast.error(r.error);
+          if (!r.ok) { toast.error(r.error); return; }
           setLink({ open: false, name: '', url: '' });
           onChange();
         }}>
